@@ -3,11 +3,14 @@ package com.learning.firebasecurso.realtimebasico
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import com.learning.firebasecurso.R
 import com.learning.firebasecurso.databinding.ActivityMainBinding
 import com.learning.firebasecurso.realtimebasico.data.Todo
 
@@ -46,14 +49,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpUI() {
-        binding.btnUpdate.setOnClickListener {
-            firebaseInstance.writeOnFirebase()
+        todoAdapter = TodoAdapter { reference ->
+            firebaseInstance.removeFromDatabase(reference)
         }
-        todoAdapter = TodoAdapter()
         binding.rvTasks.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = todoAdapter
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.btnAddTask -> {
+                firebaseInstance.writeOnFirebase()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun getCleanSnapShot(snapshot: DataSnapshot): List<Pair<String, Todo>> {
