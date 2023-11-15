@@ -9,7 +9,10 @@ import com.learning.firebasecurso.R
 import com.learning.firebasecurso.databinding.ItemTodoBinding
 import com.learning.firebasecurso.realtimebasico.data.Todo
 
-class TodoAdapter(private var todoList: List<Pair<String, Todo>> = emptyList()) :
+class TodoAdapter(
+    private var todoList: List<Pair<String, Todo>> = emptyList(),
+    private val onItemSelected: (String) -> Unit
+) :
     RecyclerView.Adapter<TodoViewHolder>() {
 
     fun setNewList(newList: List<Pair<String, Todo>>) {
@@ -31,7 +34,7 @@ class TodoAdapter(private var todoList: List<Pair<String, Todo>> = emptyList()) 
     }
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
-        holder.bind(todoList[position])
+        holder.bind(todoList[position], onItemSelected)
     }
 
 }
@@ -61,9 +64,13 @@ class TodoDiffCallback(
 class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val binding = ItemTodoBinding.bind(itemView)
-    fun bind(todoTask: Pair<String, Todo>) {
+    fun bind(todoTask: Pair<String, Todo>, onItemSelected: (String) -> Unit) {
         binding.tvTitle.text = todoTask.second.title
         binding.tvDescription.text = todoTask.second.description
+        binding.tvReference.text = todoTask.first
+        binding.cvItem.setOnClickListener {
+            onItemSelected(todoTask.first)
+        }
     }
 
 }
