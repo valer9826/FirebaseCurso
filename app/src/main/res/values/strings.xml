@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FirebaseCurso</string>
+    <string name="item_menu_add_todo">Add Todo</string>
 </resources>
