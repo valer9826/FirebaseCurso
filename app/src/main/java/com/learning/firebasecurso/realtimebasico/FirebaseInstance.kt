@@ -38,4 +38,8 @@ class FirebaseInstance(
         )
     }
 
+    fun removeFromDatabase(reference: String) {
+        myRef.child(reference).removeValue()
+    }
+
 }
