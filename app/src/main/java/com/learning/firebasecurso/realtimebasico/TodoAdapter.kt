@@ -3,6 +3,7 @@ package com.learning.firebasecurso.realtimebasico
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.learning.firebasecurso.R
@@ -11,7 +12,7 @@ import com.learning.firebasecurso.realtimebasico.data.Todo
 
 class TodoAdapter(
     private var todoList: List<Pair<String, Todo>> = emptyList(),
-    private val onItemSelected: (String) -> Unit
+    private val onItemSelected: (Actions, String) -> Unit
 ) :
     RecyclerView.Adapter<TodoViewHolder>() {
 
@@ -64,13 +65,18 @@ class TodoDiffCallback(
 class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val binding = ItemTodoBinding.bind(itemView)
-    fun bind(todoTask: Pair<String, Todo>, onItemSelected: (String) -> Unit) {
+    fun bind(todoTask: Pair<String, Todo>, onItemSelected: (Actions, String) -> Unit) {
         binding.tvTitle.text = todoTask.second.title
         binding.tvDescription.text = todoTask.second.description
         binding.tvReference.text = todoTask.first
-        binding.cvItem.setOnClickListener {
-            onItemSelected(todoTask.first)
+        binding.ivDone.setOnClickListener { onItemSelected(Actions.DONE, todoTask.first) }
+        binding.ivDelete.setOnClickListener { onItemSelected(Actions.DELETE, todoTask.first) }
+        val color = if (todoTask.second.done == true) {
+            R.color.gold
+        } else {
+            R.color.black
         }
+        binding.cvItem.strokeColor = ContextCompat.getColor(binding.cvItem.context, color)
     }
 
 }

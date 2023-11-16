@@ -3,5 +3,5 @@ package com.learning.firebasecurso.realtimebasico.data
 data class Todo(
     val title: String? = "",
     val description: String? = "",
-    val isDone: Boolean? = false
+    val done: Boolean? = false
 )
