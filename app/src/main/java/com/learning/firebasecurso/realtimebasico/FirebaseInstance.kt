@@ -33,13 +33,35 @@ class FirebaseInstance(
 
     private fun getGenericTodoTaskItem(randomValue: String): Todo {
         return Todo(
-            title= "tarea $randomValue",
+            title = "tarea $randomValue",
             description = "Esto es una descripción",
         )
     }
 
     fun removeFromDatabase(reference: String) {
         myRef.child(reference).removeValue()
+    }
+
+    fun updateFromDatabase(reference: String) {
+        myRef.child(reference).child("done").get().addOnSuccessListener { dataSnapshot ->
+            // Este bloque se ejecuta si la recuperación fue exitosa
+            if (dataSnapshot.exists()) {
+                // Suponiendo que el valor de "done" es un booleano
+                val isDone = dataSnapshot.getValue(Boolean::class.java) ?: false
+
+                // Aquí puedes evaluar el valor de isDone
+                if (isDone) {
+                    myRef.child(reference).child("done").setValue(false)
+                } else {
+                    myRef.child(reference).child("done").setValue(true)
+                }
+            } else {
+                // El nodo "done" no existe en la base de datos para la referencia dada
+            }
+        }.addOnFailureListener {
+            // Este bloque se ejecuta si hubo un error al recuperar el valor
+            // Maneja el error aquí
+        }
     }
 
 }
