@@ -20,11 +20,11 @@ class FirebaseInstance(
         FirebaseApp.initializeApp(context)
     }
 
-    fun writeOnFirebase() {
+    fun writeOnFirebase(title: String, description: String) {
         val random = Random.nextInt(1, 200).toString()
 //        myRef.setValue("Mi primera escritura: $random")
         val newItem = myRef.push()
-        newItem.setValue(getGenericTodoTaskItem(random))
+        newItem.setValue(Todo(title = title, description = description))
     }
 
     fun setupDatabaseListener(postListener: ValueEventListener) {

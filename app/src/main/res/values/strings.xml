@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">FirebaseCurso</string>
     <string name="item_menu_add_todo">Add Todo</string>
+    <string name="dialog_add_task_title">Añadir tarea</string>
+    <string name="dialog_add_task_button">Añadir tarea</string>
+    <string name="dialog_add_task_title_hint">Título</string>
+    <string name="dialog_add_task_title_hint_description">Descripción</string>
 </resources>

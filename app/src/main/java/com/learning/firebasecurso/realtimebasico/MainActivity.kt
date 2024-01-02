@@ -1,10 +1,13 @@
 package com.learning.firebasecurso.realtimebasico
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager.LayoutParams
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,6 +15,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import com.learning.firebasecurso.R
 import com.learning.firebasecurso.databinding.ActivityMainBinding
+import com.learning.firebasecurso.databinding.DialogAddTaskBinding
 import com.learning.firebasecurso.realtimebasico.data.Todo
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +52,27 @@ class MainActivity : AppCompatActivity() {
         firebaseInstance.setupDatabaseListener(postListener)
     }
 
+    private fun showDialog() {
+        val binding = DialogAddTaskBinding.inflate(layoutInflater)
+        val dialog = Dialog(this)
+        dialog.setContentView(binding.root)
+
+        dialog.window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        binding.btnAddTask.setOnClickListener {
+            val title = binding.etTitle.text.toString()
+            val description = binding.etDescription.text.toString()
+
+            if (title.isEmpty() || description.isEmpty()) {
+                Toast.makeText(this, "Completa los campos", Toast.LENGTH_SHORT).show()
+            } else {
+                firebaseInstance.writeOnFirebase(title, description)
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+    }
+
     private fun setUpUI() {
         todoAdapter = TodoAdapter { action, reference ->
             when (action) {
@@ -70,7 +95,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.btnAddTask -> {
-                firebaseInstance.writeOnFirebase()
+                showDialog()
             }
         }
         return super.onOptionsItemSelected(item)
